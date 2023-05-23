@@ -14,15 +14,16 @@ export interface Row {
 export class DataManipulator {
   static generateRow(serverRespond: ServerRespond[]): Row {
 
-    const priceABC = (serverRespond[0].top_ask.price+ serverRespond[0].top_bid.price) / 2;
-    const priceDEF= (serverRespond[1].top_ask.price+ serverRespond[1].top_bid.price) / 2;
-    const ratio = priceABC/priceDEF;
-    const upper_bound  = 1+.05;
-    const lower_bound = 1-.05;
+    const price_abc = (serverRespond[0].top_ask.price+ serverRespond[0].top_bid.price) / 2;
+    const price_def= (serverRespond[1].top_ask.price+ serverRespond[1].top_bid.price) / 2;
+    const ratio = price_abc/price_def;
+    const tol = .10;
+    const upper_bound  = 1+tol;
+    const lower_bound = 1-tol;
 
     return{
-      price_abc: priceABC,
-      price_def: priceDEF,
+      price_abc,
+      price_def,
       ratio,
       timestamp: serverRespond[0].timestamp > serverRespond[1].timestamp ?
           serverRespond[0].timestamp : serverRespond[1].timestamp,
